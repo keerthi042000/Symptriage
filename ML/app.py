@@ -20,22 +20,22 @@ class MLPModel(nn.Module):
         return x
 
 # Load the trained models
-with open('RandomForest.pkl', 'rb') as rf_file:
+with open('models/RandomForest.pkl', 'rb') as rf_file:
     random_forest_model = pickle.load(rf_file)
 
-with open('knn_model.pkl', 'rb') as knn_file:
+with open('models/knn_model.pkl', 'rb') as knn_file:
     knn_model = pickle.load(knn_file)
 
-with open('MLPmodel.pkl', 'rb') as mlp_file:
+with open('models/MLPmodel.pkl', 'rb') as mlp_file:
     mlp_model = pickle.load(mlp_file)
 
-with open('XGBoost.pkl', 'rb') as xgb_file:
+with open('models/XGBoost.pkl', 'rb') as xgb_file:
     xgboost_model = pickle.load(xgb_file)
 
-with open('label_encoder.pkl', 'rb') as le_file:
+with open('models/label_encoder.pkl', 'rb') as le_file:
     label_encoder = pickle.load(le_file)
 
-with open('MLPscaler.pkl', 'rb') as le_file:
+with open('models/MLPscaler.pkl', 'rb') as le_file:
     scaler = pickle.load(le_file)
 
 symptom_columns = ['itching', 'shivering', 'chills', 'acidity', 'vomiting', 'fatigue', 'anxiety', 'restlessness', 'lethargy', 'cough', 'breathlessness', 'sweating', 'dehydration', 'indigestion', 'headache', 'nausea', 'constipation', 'diarrhoea', 'malaise', 'phlegm', 'congestion', 'dizziness', 'cramps', 'bruising', 'obesity', 'unsteadiness', 'depression', 'irritability', 'polyuria', 'coma', 'palpitations', 'blackheads', 'scurring', 'blister', 'skin rash', 'pus filled pimples', 'mood swings', 'weight loss', 'fast heart rate', 'excessive hunger', 'muscle weakness', 'abnormal menstruation', 'muscle wasting', 'patches in throat', 'high fever', 'extra marital contacts', 'yellowish skin', 'loss of appetite', 'abdominal pain', 'yellowing of eyes', 'chest pain', 'loss of balance', 'lack of concentration', 'blurred and distorted vision', 'drying and tingling lips', 'slurred speech', 'stiff neck', 'swelling joints', 'painful walking', 'dark urine', 'yellow urine', 'receiving blood transfusion', 'receiving unsterile injections', 'visual disturbances', 'burning micturition', 'bladder discomfort', 'foul smell of urine', 'continuous feel of urine', 'irregular sugar level', 'increased appetite', 'joint pain', 'skin peeling', 'small dents in nails', 'inflammatory nails', 'swelling of stomach', 'distention of abdomen', 'history of alcohol consumption', 'fluid overload', 'pain during bowel movements', 'pain in anal region', 'bloody stool', 'irritation in anus', 'acute liver failure', 'stomach bleeding', 'back pain', 'weakness in limbs', 'neck pain', 'mucoid sputum', 'mild fever', 'muscle pain', 'family history', 'continuous sneezing', 'watering from eyes', 'rusty sputum', 'weight gain', 'puffy face and eyes', 'enlarged thyroid', 'brittle nails', 'swollen extremeties', 'swollen legs', 'prominent veins on calf', 'stomach pain', 'spinning movements', 'sunken eyes', 'silver like dusting', 'swelled lymph nodes', 'blood in sputum', 'swollen blood vessels', 'toxic look (typhos)', 'belly pain', 'throat irritation', 'redness of eyes', 'sinus pressure', 'runny nose', 'loss of smell', 'passage of gases', 'cold hands and feets', 'weakness of one body side', 'altered sensorium', 'nodal skin eruptions', 'red sore around nose', 'yellow crust ooze', 'ulcers on tongue', 'spotting  urination', 'pain behind the eyes', 'red spots over body', 'internal itching', 'movement stiffness', 'knee pain', 'hip joint pain', 'dischromic  patches']
