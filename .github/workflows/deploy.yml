@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check package manager
-        working-directory: ./web-application
+        working-directory: web-application
         run: |
           if [ -f "yarn.lock" ]; then
             echo "manager=yarn" >> $GITHUB_OUTPUT
@@ -71,11 +71,11 @@ jobs:
 
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-        working-directory: ./web-applications
+        working-directory: web-applications
 
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
-        working-directory: ./web-applications
+        working-directory: web-applications
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
