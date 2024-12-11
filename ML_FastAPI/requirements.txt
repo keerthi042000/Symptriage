@@ -1,0 +1,7 @@
+dbos==0.14.0
+pandas
+scikit-learn
+xgboost
+fastapi
+torch==2.2.0+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
