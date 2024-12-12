@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 // import { createUserWithEmailAndPassword } from "firebase/auth";
-import { signUp } from "../../../utils/db";
+import { getMedicine, signUp } from "../../../utils/db";
 import { useRouter } from "next/navigation";
 
 export default function Signup() {
@@ -20,6 +20,8 @@ export default function Signup() {
         const lastName = (form.elements.namedItem("lname") as HTMLInputElement).value;
         const email = (form.elements.namedItem("email") as HTMLInputElement).value;
         const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+        // let res= await getMedicine("Acne")
+        // console.log(res)
 
         try {
             // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
