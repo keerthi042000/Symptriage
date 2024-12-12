@@ -32,7 +32,7 @@ export default function Chatbot() {
   const [input, setInput] = useState<string>("");
   const openai = new OpenAI({
     organization: process.env.OPENAI_ORG,
-    apiKey: "",
+    apiKey: process.env.OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
   });
 
