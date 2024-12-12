@@ -5,7 +5,7 @@ import axios from "axios";
 import "dotenv/config";
 import OpenAI from "openai";
 import { useRouter } from "next/navigation";
-
+import { updateUserHistory, getUser } from "../../../utils/db";
 // Define the type for a message
 type Message = {
   sender: string;
@@ -32,8 +32,8 @@ export default function Chatbot() {
   // State to store the user's input
   const [input, setInput] = useState<string>("");
   const openai = new OpenAI({
-    organization: process.env.OPENAI_ORG,
-    apiKey: process.env.OPENAI_API_KEY,
+    organization: process.env.NEXT_PUBLIC_OPENAI_ORG,
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
   });
 
@@ -260,22 +260,46 @@ export default function Chatbot() {
     };
     setMessages((prev) => [...prev, userMessage]);
     const response = await extractSymptoms(input.trim());
-    const res: Response = await sendToBackend(response);
-    const text = `Predicted - ${
-      res?.majority_prediction
-    }`;
-
-    // Add chatbot response after user message
-    const chatbotReply: Message = {
-      sender: "Chatbot",
-      text: text,
-      timestamp: currentTime,
-    };
-
-    setTimeout(() => {
-      setMessages((prev) => [...prev, chatbotReply]);
-    }, 1000); // Simulate a delay for the bot's response
-
+    if(Object.keys(response).length !==0){
+      const res: Response = await sendToBackend(response);
+      const text = `Predicted - ${
+        res?.majority_prediction
+      }`;
+      const getUserInfo = await getUser(localStorage.getItem("email"));
+      const currentDate = new Date();
+  
+  // Format the date as "YYYY-MM-DD"
+      const formattedDateTime = currentDate.getFullYear() + '-' 
+      + String(currentDate.getMonth() + 1).padStart(2, '0') + '-' 
+      + String(currentDate.getDate()).padStart(2, '0') + ' ' 
+      + String(currentDate.getHours()).padStart(2, '0') + ':' 
+      + String(currentDate.getMinutes()).padStart(2, '0') + ':' 
+      + String(currentDate.getSeconds()).padStart(2, '0');
+      let oldHistory = getUserInfo.history || []; 
+      await updateUserHistory(localStorage.getItem("email"),[...oldHistory ,{ [formattedDateTime]: res?.majority_prediction }]);
+  
+      // Add chatbot response after user message
+      const chatbotReply: Message = {
+        sender: "Chatbot",
+        text: text,
+        timestamp: currentTime,
+      };
+  
+      setTimeout(() => {
+        setMessages((prev) => [...prev, chatbotReply]);
+      }, 1000); // Simulate a delay for the bot's response
+    }else{
+       // Add chatbot response after user message
+       const chatbotReply: Message = {
+        sender: "Chatbot",
+        text: "Please provide more details about your symptoms.",
+        timestamp: currentTime,
+      };
+  
+      setTimeout(() => {
+        setMessages((prev) => [...prev, chatbotReply]);
+      }, 1000); // Simulate a delay for the bot's response
+    }
     // Clear the input field
     setInput("");
   };

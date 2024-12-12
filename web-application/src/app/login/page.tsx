@@ -22,7 +22,7 @@ export default function Login() {
             console.log("Logged in user:", response);
             
             // Redirect to dashboard or home page after successful login
-            router.push("/dashboard"); // Adjust this path as needed
+            router.push("/chatbot"); // Adjust this path as needed
         } catch (error: any) {
             if (error.code) {
                 switch (error.code) {

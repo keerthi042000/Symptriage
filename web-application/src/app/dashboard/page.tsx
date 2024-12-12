@@ -1,21 +1,16 @@
 "use client";
 
 // import { useState } from "react";
+import { getUser } from "../../../utils/db";
 
-export default function Dashboard() {
+export default async function Dashboard() {
     // const [message, setMessage] = useState("");
     // const [chatMessages, setChatMessages] = useState([
     //     { role: "system", content: "Hello! How are you feeling today?" }
     // ]);
-
+    const getUserInfo = await getUser(localStorage.getItem("email"));
     // Mock patient history data
-    const patientHistory = [
-        { date: "2023-12-15", disease: "Anxiety" },
-        { date: "2023-11-20", disease: "Depression" },
-        { date: "2023-10-05", disease: "Panic Attack" },
-        { date: "2023-09-15", disease: "Social Anxiety" },
-        { date: "2023-08-22", disease: "Insomnia" },
-    ];
+    const patientHistory = getUserInfo;
 
     // const handleSendMessage = (e: React.FormEvent) => {
     //     e.preventDefault();
@@ -60,10 +55,10 @@ export default function Dashboard() {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {patientHistory.map((record, index) => (
+                                    {Object.keys(patientHistory).map((key, index) => (
                                         <tr key={index} className="hover:bg-gray-50">
-                                            <td className="px-6 py-4 whitespace-nowrap">{record.date}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{record.disease}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{key}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{patientHistory[key].disease}</td>
                                         </tr>
                                     ))}
                                 </tbody>
