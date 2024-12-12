@@ -1,31 +1,53 @@
-// app/login/page.tsx
+// app/signup/page.tsx
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { signUp } from "../../../utils/db";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { auth } from "../firebase/config";
 
 export default function Signup() {
+    const [error, setError] = useState("");
+    const router = useRouter();
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        setError("");
+        
         const form = e.target as HTMLFormElement;
-        const formData = {
-            name:(form.elements.namedItem('fname') as HTMLInputElement).value+" "+(form.elements.namedItem('lname') as HTMLInputElement).value,
-            email: (form.elements.namedItem('email') as HTMLInputElement).value,
-            password: (form.elements.namedItem('password') as HTMLInputElement).value
-        };
-    
+        const firstName = (form.elements.namedItem('fname') as HTMLInputElement).value;
+        const lastName = (form.elements.namedItem('lname') as HTMLInputElement).value;
+        const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+        const password = (form.elements.namedItem('password') as HTMLInputElement).value;
+
         try {
-            await signUp(formData);
-            // Redirect or handle successful signup
-        } catch (error) {
-            console.error('Signup failed:', error);
-            // Handle error (show error message to user)
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            console.log("Signed up user:", user);
+            
+            // Redirect to dashboard or home page after successful signup
+            router.push("/dashboard");
+        } catch (error: any) {
+            // Handle different error codes
+            switch (error.code) {
+                case "auth/email-already-in-use":
+                    setError("This email is already registered.");
+                    break;
+                case "auth/invalid-email":
+                    setError("Invalid email address.");
+                    break;
+                case "auth/weak-password":
+                    setError("Password should be at least 6 characters.");
+                    break;
+                default:
+                    setError("An error occurred during signup. Please try again.");
+                    break;
+            }
+            console.error("Signup error:", error);
         }
     };
-    
-
 
     return (
         <main className="flex min-h-screen">
@@ -50,8 +72,13 @@ export default function Signup() {
                     <h1 className="text-3xl font-semibold text-blue-600 text-center mb-4">
                         Welcome!
                     </h1>
+                    {error && (
+                        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+                            {error}
+                        </div>
+                    )}
                     <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
+                        <div>
                             <label className="block text-gray-700 mb-2">First Name</label>
                             <input
                                 type="text"
@@ -64,7 +91,7 @@ export default function Signup() {
                             <label className="block text-gray-700 mb-2">Last Name</label>
                             <input
                                 type="text"
-                                 name="lname"
+                                name="lname"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
                                 required
                             />
@@ -94,7 +121,6 @@ export default function Signup() {
                             Submit
                         </button>
                     </form>
-                    
                 </div>
             </div>
         </main>
