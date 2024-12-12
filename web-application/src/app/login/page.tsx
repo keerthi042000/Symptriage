@@ -1,19 +1,16 @@
-// app/login/page.tsx
 "use client";
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
-
-import { auth } from "../firebase/config";
-
+import { auth } from "../firebase/config"; // Ensure this path is correct
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState<string>("");
     const router = useRouter();
 
     const handleSubmit = async (e: FormEvent) => {
@@ -24,24 +21,27 @@ export default function Login() {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             console.log("Logged in user:", user);
-            
+
             // Redirect to dashboard or home page after successful login
-            router.push("/dashboard"); // Change this to your desired redirect path
+            router.push("/dashboard"); // Adjust this path as needed
         } catch (error: any) {
-            // Handle different error codes
-            switch (error.code) {
-                case "auth/user-not-found":
-                    setError("No user found with this email.");
-                    break;
-                case "auth/wrong-password":
-                    setError("Incorrect password.");
-                    break;
-                case "auth/invalid-email":
-                    setError("Invalid email address.");
-                    break;
-                default:
-                    setError("An error occurred during login. Please try again.");
-                    break;
+            if (error.code) {
+                switch (error.code) {
+                    case "auth/user-not-found":
+                        setError("No user found with this email.");
+                        break;
+                    case "auth/wrong-password":
+                        setError("Incorrect password.");
+                        break;
+                    case "auth/invalid-email":
+                        setError("Invalid email address.");
+                        break;
+                    default:
+                        setError("An error occurred during login. Please try again.");
+                        break;
+                }
+            } else {
+                setError("An unexpected error occurred.");
             }
             console.error("Login error:", error);
         }
@@ -59,6 +59,7 @@ export default function Login() {
                         alt="Prediction"
                         width={200}
                         height={200}
+                        priority // Ensures faster loading of this image
                     />
                 </div>
             </div>
@@ -76,8 +77,14 @@ export default function Login() {
                     )}
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
-                            <label className="block text-gray-700 mb-2">Email</label>
+                            <label
+                                htmlFor="email"
+                                className="block text-gray-700 mb-2"
+                            >
+                                Email
+                            </label>
                             <input
+                                id="email"
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -86,8 +93,14 @@ export default function Login() {
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700 mb-2">Password</label>
+                            <label
+                                htmlFor="password"
+                                className="block text-gray-700 mb-2"
+                            >
+                                Password
+                            </label>
                             <input
+                                id="password"
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
