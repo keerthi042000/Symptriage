@@ -5,7 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { auth } from "../firebase/config"; // Ensure this path is correct
+
+import { auth } from "../firebase/config";
+import { signIn } from "../../../utils/db";
+
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -18,10 +21,9 @@ export default function Login() {
         setError("");
 
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            console.log("Logged in user:", user);
-
+            const response = await signIn(email, password);
+            console.log("Logged in user:", response);
+            
             // Redirect to dashboard or home page after successful login
             router.push("/dashboard"); // Adjust this path as needed
         } catch (error: any) {
