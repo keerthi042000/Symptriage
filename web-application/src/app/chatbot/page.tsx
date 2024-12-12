@@ -25,7 +25,7 @@ interface Response {
 export default function Chatbot() {
   // State to store the chat messages
   const [messages, setMessages] = useState<Message[]>([]);
-  const [viewMessage, setviewMessage] = useState<Boolean>(false);
+  const [viewMessage] = useState<Boolean>(false);
   const router = useRouter();
 
   // State to store the user's input

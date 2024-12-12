@@ -3,10 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
-
-import { auth } from "../firebase/config";
 import { signIn } from "../../../utils/db";
 
 

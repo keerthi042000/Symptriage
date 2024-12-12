@@ -6,7 +6,6 @@ import Image from "next/image";
 // import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signUp } from "../../../utils/db";
 import { useRouter } from "next/navigation";
-import { auth } from "../firebase/config"; // Ensure the path is correct
 
 export default function Signup() {
     const [error, setError] = useState<string>("");
