@@ -52,7 +52,7 @@ const signUp = async (user) => {
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log(errorCode, errorMessage);
-    alert(errorMessage);
+    // alert(errorMessage);
     return { code: errorCode, msg: errorMessage };
   }
 };
@@ -72,11 +72,11 @@ const signIn = async (email, password) => {
     // localStorage.setItem("user", user);
     // alert("user signed in successfully");
     return { code: "200" };
-  } catch (e) {
+  } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log(errorCode, errorMessage);
-    alert(errorMessage);
+    // alert(errorMessage);
     return { code: errorCode, msg: errorMessage };
   }
 };
@@ -99,7 +99,7 @@ const userSignOut = async () => {
   try {
     await signOut(auth);
     return true;
-  } catch (e) {
+  } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log(errorCode, errorMessage);
@@ -128,9 +128,34 @@ const getUser = async (email) => {
     let user = await getDoc(docRef);
     console.log(user.data());
     return { code: "200", user: user.data() };
-  } catch (e) {
+  } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+    return { code: errorCode, msg: errorMessage };
+  }
+};
+
+const getMedicine = async (disease) => {
+  try {
+    let medicines = {};
+    for (let i = 0; i <= 9; i++) {
+      const key = `${disease}${i}`;
+      const docRef = doc(db, "medicine", key);
+      let docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        // console.log(docSnap.data());
+
+        medicines[key] = docSnap.data();
+      }
+    }
+
+    // console.log(medicines);
+    return { code: "200", medicines };
+  } catch (e) {
+    const errorCode = e.code;
+    const errorMessage = e.message;
     console.log(errorCode, errorMessage);
     return { code: errorCode, msg: errorMessage };
   }
@@ -158,4 +183,5 @@ export {
   addUser,
   getUser,
   updateUserHistory,
+  getMedicine,
 };
