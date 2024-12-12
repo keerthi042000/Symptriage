@@ -5,11 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 // import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signUp } from "../../../utils/db";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Signup() {
     const [error, setError] = useState<string>("");
-    // const router = useRouter();
+    const router = useRouter();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -34,7 +34,7 @@ export default function Signup() {
              await signUp(user)
            
             // Redirect to the dashboard or home page after successful signup
-            //router.push("/dashboard");
+            router.push("/chatbot");
         } catch (error: any) {
             if (error.code) {
                 switch (error.code) {
