@@ -7,12 +7,20 @@ import pickle
 import pandas as pd
 from collections import Counter
 from dbos import DBOS
+from fastapi.middleware.cors import CORSMiddleware
 # Welcome to DBOS!
 # This is a template application built with DBOS and FastAPI.
 
 app = FastAPI()
 DBOS(fastapi=app)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
 with open('app/RandomForest.pkl', 'rb') as rf_file:
     random_forest_model = pickle.load(rf_file)
