@@ -16,10 +16,13 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.1.10",
+    "axios": "^1.7.9",
     "firebase": "^11.0.2",
     "next": "^15.0.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "dotenv": "^16.4.7",
+    "openai": "^4.76.1"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
