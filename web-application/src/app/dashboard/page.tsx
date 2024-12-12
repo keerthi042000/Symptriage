@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+// import { useState } from "react";
 
 export default function Dashboard() {
-    const [message, setMessage] = useState("");
-    const [chatMessages, setChatMessages] = useState([
-        { role: "system", content: "Hello! How are you feeling today?" }
-    ]);
+    // const [message, setMessage] = useState("");
+    // const [chatMessages, setChatMessages] = useState([
+    //     { role: "system", content: "Hello! How are you feeling today?" }
+    // ]);
 
     // Mock patient history data
     const patientHistory = [
@@ -17,19 +17,19 @@ export default function Dashboard() {
         { date: "2023-08-22", disease: "Insomnia" },
     ];
 
-    const handleSendMessage = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (message.trim()) {
-            setChatMessages([...chatMessages, { role: "user", content: message }]);
-            setMessage("");
-        }
-    };
+    // const handleSendMessage = (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //     if (message.trim()) {
+    //         setChatMessages([...chatMessages, { role: "user", content: message }]);
+    //         setMessage("");
+    //     }
+    // };
 
     // Calculate dynamic max-height based on number of entries
     const getTableHeight = () => {
         const baseRowHeight = 53; // Height of each row (including padding)
         const headerHeight = 48; // Height of the header
-        const minHeight = baseRowHeight + headerHeight; // Minimum height for one entry + header
+        // const minHeight = baseRowHeight + headerHeight; // Minimum height for one entry + header
         const maxHeight = "60vh"; // Maximum height constraint
         
         const contentHeight = (patientHistory.length * baseRowHeight) + headerHeight;

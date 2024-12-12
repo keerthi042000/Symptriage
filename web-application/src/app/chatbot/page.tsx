@@ -12,6 +12,7 @@ type Message = {
   text: string;
   timestamp: string;
 };
+
 interface Response {
   predictions: {
     "Random Forest": string;
@@ -25,7 +26,7 @@ interface Response {
 export default function Chatbot() {
   // State to store the chat messages
   const [messages, setMessages] = useState<Message[]>([]);
-  const [viewMessage] = useState<Boolean>(false);
+  const [viewMessage] = useState<boolean>(false); // Fix: use 'boolean' instead of 'Boolean'
   const router = useRouter();
 
   // State to store the user's input
@@ -172,7 +173,7 @@ export default function Chatbot() {
   ];
 
   // Function to extract symptoms using ChatGPT
-  async function extractSymptoms(sentence: any) {
+  async function extractSymptoms(sentence: string) { // Fix: Specify 'string' instead of 'any'
     const prompt = `
     You are a medical assistant. Identify symptoms from the user sentence and return them in the following JSON format:
     {
@@ -202,12 +203,13 @@ export default function Chatbot() {
         throw new Error("Unexpected response content");
       }
     } catch (error) {
+      console.error("Error extracting symptoms:", error); // Fix: Log error details
       return { error: "Failed to process the request" };
     }
   }
 
   // Function to send symptoms to the backend API
-  async function sendToBackend(symptomsObj: any) {
+  async function sendToBackend(symptomsObj: Record<string, number>) { // Fix: Use Record<string, number> instead of 'any'
     try {
       const response = await axios.post(
         "https://kmurali-dbos-fastapi-starter.cloud.dbos.dev/predict",
@@ -218,9 +220,8 @@ export default function Chatbot() {
       );
       console.log("Backend response:", response.data);
       return response.data;
-    } catch (error: any) {
+    } catch (error) { // Fix: Handle error explicitly
       console.error("Error sending symptoms to backend:", error);
-      console.error("Error details:", error.response?.data || error.message);
     }
   }
 
@@ -239,9 +240,8 @@ export default function Chatbot() {
           }),
         },
       ]);
-      
     }
-  }, []); // Empty dependency array ensures this runs only once
+  }, [viewMessage]); // Fix: Include 'viewMessage' in the dependency array
 
   // Function to handle sending a message
   const handleSendMessage = async () => {
@@ -262,8 +262,9 @@ export default function Chatbot() {
     const response = await extractSymptoms(input.trim());
     const res: Response = await sendToBackend(response);
     const text = `Predicted - ${
-      (res as { majority_prediction: string })["majority_prediction"]
+      res?.majority_prediction
     }`;
+
     // Add chatbot response after user message
     const chatbotReply: Message = {
       sender: "Chatbot",
@@ -277,14 +278,6 @@ export default function Chatbot() {
 
     // Clear the input field
     setInput("");
-  };
-
-  // Function to generate a basic chatbot response
-  const generateResponse = (userInput: string): string => {
-    if (userInput.toLowerCase().includes("help")) {
-      return "How can I assist you today?";
-    }
-    return "I'm here to support you. Please share more.";
   };
 
   // Function to handle key press in the input field

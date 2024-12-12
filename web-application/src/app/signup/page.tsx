@@ -5,11 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 // import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signUp } from "../../../utils/db";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 export default function Signup() {
     const [error, setError] = useState<string>("");
-    const router = useRouter();
+    // const router = useRouter();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -25,15 +25,14 @@ export default function Signup() {
             // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             // const user = userCredential.user;
             // console.log("Signed up user:", user);
-            let user = {
+            const user = {
                 name: `${firstName} ${lastName}`,
                 email: email,
                 password: password
             }
 
-            let res = await signUp(user)
-            console.log(res)
-
+             await signUp(user)
+           
             // Redirect to the dashboard or home page after successful signup
             //router.push("/dashboard");
         } catch (error: any) {
