@@ -54,7 +54,7 @@ const signUp = async (user) => {
     );
     const res = userCreditional.user;
     console.log(res);
-    // localStorage.setItem("user", user);
+    localStorage.setItem("user", user);
     // alert("user created successfully");
     return await addUser(user);
   } catch (error) {
@@ -78,7 +78,7 @@ const signIn = async (email, password) => {
     );
     const user = userCredential.user;
     console.log(user);
-    // localStorage.setItem("user", user);
+    localStorage.setItem("user", user);
     // alert("user signed in successfully");
     return { code: "200" };
   } catch (error) {
