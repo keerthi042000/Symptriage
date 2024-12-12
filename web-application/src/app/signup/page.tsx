@@ -4,12 +4,28 @@
 import { FormEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { signUp } from "../../../utils/db";
 
-export default function Login() {
-    const handleSubmit = (e: FormEvent) => {
+export default function Signup() {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        alert("Login submitted");
+        const form = e.target as HTMLFormElement;
+        const formData = {
+            name:(form.elements.namedItem('fname') as HTMLInputElement).value+" "+(form.elements.namedItem('lname') as HTMLInputElement).value,
+            email: (form.elements.namedItem('email') as HTMLInputElement).value,
+            password: (form.elements.namedItem('password') as HTMLInputElement).value
+        };
+    
+        try {
+            await signUp(formData);
+            // Redirect or handle successful signup
+        } catch (error) {
+            console.error('Signup failed:', error);
+            // Handle error (show error message to user)
+        }
     };
+    
+
 
     return (
         <main className="flex min-h-screen">
@@ -38,7 +54,8 @@ export default function Login() {
                     <div>
                             <label className="block text-gray-700 mb-2">First Name</label>
                             <input
-                                type="email"
+                                type="text"
+                                name="fname"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
                                 required
                             />
@@ -46,7 +63,8 @@ export default function Login() {
                         <div>
                             <label className="block text-gray-700 mb-2">Last Name</label>
                             <input
-                                type="email"
+                                type="text"
+                                 name="lname"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
                                 required
                             />
@@ -55,6 +73,7 @@ export default function Login() {
                             <label className="block text-gray-700 mb-2">Email</label>
                             <input
                                 type="email"
+                                name="email"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
                                 required
                             />
@@ -63,6 +82,7 @@ export default function Login() {
                             <label className="block text-gray-700 mb-2">Password</label>
                             <input
                                 type="password"
+                                name="password"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
                                 required
                             />
@@ -71,15 +91,10 @@ export default function Login() {
                             type="submit"
                             className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-lg transition"
                         >
-                            Login
+                            Submit
                         </button>
                     </form>
-                    <p className="mt-6 text-center text-gray-600">
-                        Don't have an account?{" "}
-                        <Link href="/signup" className="text-blue-600 hover:underline">
-                            Sign up here
-                        </Link>
-                    </p>
+                    
                 </div>
             </div>
         </main>
