@@ -8,7 +8,7 @@ export default async function Dashboard() {
     // const [chatMessages, setChatMessages] = useState([
     //     { role: "system", content: "Hello! How are you feeling today?" }
     // ]);
-    const getUserInfo = await getUser(localStorage.getItem("email"));
+    const getUserInfo = await getUser(window.localStorage.getItem("email"));
     // Mock patient history data
     const patientHistory = getUserInfo;
 

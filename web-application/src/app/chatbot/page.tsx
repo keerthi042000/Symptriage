@@ -261,7 +261,7 @@ export default function Chatbot() {
       const text = `Predicted - ${
         res?.majority_prediction
       }`;
-      const getUserInfo = await getUser(localStorage.getItem("email"));
+      const getUserInfo = await getUser(window.localStorage.getItem("email"));
       const currentDate = new Date();
   
   // Format the date as "YYYY-MM-DD"
@@ -272,7 +272,7 @@ export default function Chatbot() {
       + String(currentDate.getMinutes()).padStart(2, '0') + ':' 
       + String(currentDate.getSeconds()).padStart(2, '0');
       let oldHistory = getUserInfo.history || []; 
-      await updateUserHistory(localStorage.getItem("email"),[...oldHistory ,{ [formattedDateTime]: res?.majority_prediction }]);
+      await updateUserHistory(window.localStorage.getItem("email"),[...oldHistory ,{ [formattedDateTime]: res?.majority_prediction }]);
   
       // Add chatbot response after user message
       const chatbotReply: Message = {
