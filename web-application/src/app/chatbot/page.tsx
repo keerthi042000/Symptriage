@@ -326,7 +326,7 @@ export default function Chatbot() {
       {/* Sidebar */}
       <div className="w-64 bg-slate-800 p-5 text-white">
         <h2 className="mb-5 text-center text-xl font-bold">
-          Mental Health Support
+          ChatBot
         </h2>
         <ul>
           <li
@@ -356,7 +356,7 @@ export default function Chatbot() {
       <div className="flex flex-1 flex-col bg-gray-50">
         {/* Chat Header */}
         <div className="bg-blue-500 p-5 text-center text-white">
-          <h1 className="text-xl font-bold">Mental Health Chatbot</h1>
+          <h1 className="text-xl font-bold">SympTriage</h1>
         </div>
 
         {/* Chat Messages */}
