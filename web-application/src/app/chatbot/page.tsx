@@ -32,8 +32,8 @@ export default function Chatbot() {
   // State to store the user's input
   const [input, setInput] = useState<string>("");
   const openai = new OpenAI({
-    organization: process.env.OPENAI_ORG,
-    apiKey: process.env.OPENAI_API_KEY,
+    organization: process.env.NEXT_LOCAL_OPENAI_ORG,
+    apiKey: process.env.NEXT_LOCAL_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
   });
 
