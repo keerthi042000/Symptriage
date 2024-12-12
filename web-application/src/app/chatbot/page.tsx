@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "dotenv/config";
-import OpenAI from "openai";
 import { useRouter } from "next/navigation";
 import { updateUserHistory, getUser } from "../../../utils/db";
+import { openai } from "../../../utils/db";
+
 // Define the type for a message
 type Message = {
   sender: string;
@@ -31,11 +32,6 @@ export default function Chatbot() {
 
   // State to store the user's input
   const [input, setInput] = useState<string>("");
-  const openai = new OpenAI({
-    organization: process.env.NEXT_PUBLIC_OPENAI_ORG,
-    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-    dangerouslyAllowBrowser: true,
-  });
 
   // Predefined list of symptoms
   const symptomColumns = [
