@@ -32,7 +32,7 @@ const firebaseConfig = {
 };
 
 const openai = new OpenAI({
-    organization: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    organization: process.env.NEXT_PUBLIC_OPENAI_ORG,
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
 });
