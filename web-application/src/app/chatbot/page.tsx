@@ -262,16 +262,19 @@ export default function Chatbot() {
     const response = await extractSymptoms(input.trim());
     if(Object.keys(response).length !==0){
       const res: Response = await sendToBackend(response);
-      const text = `Predicted - ${
-        res?.majority_prediction
-      }`;
+      // const text = `Predicted - ${
+      //   res?.majority_prediction
+      // }`;
       
       let random = ["Acne","Allergies","Hypertension"]
       let r = random[getRandomInt(3)]
       let r2 = getRandomInt(10)
       const res2 = await getMedicine(r)
       console.log(res2.medicines[`${r}${r2}`].Drug);
-      alert(res2.medicines[`${r}${r2}`].Drug)
+      // alert(res2.medicines[`${r}${r2}`].Drug)
+      const text = `Predicted - ${
+        res?.majority_prediction
+      } ${res2.medicines[`${r}${r2}`].Drug}`;
       const getUserInfo = await getUser(window.localStorage.getItem("email"));
       const currentDate = new Date();
   
