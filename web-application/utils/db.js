@@ -10,6 +10,9 @@ import {
   signOut,
 } from "firebase/auth";
 
+import OpenAI from "openai";
+
+
 import {
   getFirestore,
   doc,
@@ -27,6 +30,12 @@ const firebaseConfig = {
   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_APP_ID,
 };
+
+const openai = new OpenAI({
+    organization: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true,
+});
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -184,4 +193,5 @@ export {
   getUser,
   updateUserHistory,
   getMedicine,
+  openai
 };
