@@ -8,7 +8,7 @@ const LandingPage = () => {
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <nav className="flex justify-between items-center mb-16">
-          <h1 className="text-2xl font-bold text-blue-800">SympTraige</h1>
+          <h1 className="text-2xl font-bold text-blue-800">SympTriage</h1>
           <div className="space-x-6">
             <Link href="/login" className="text-gray-600 hover:text-blue-800">Login</Link>
             <Link href="/signup" className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
@@ -29,7 +29,7 @@ const LandingPage = () => {
               <Link href="/predict" className="bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
                 Start Prediction
               </Link>
-              <Link href="/learn-more" className="border border-blue-800 text-blue-800 px-6 py-3 rounded-lg hover:bg-blue-50">
+              <Link href="./Blogs" className="border border-blue-800 text-blue-800 px-6 py-3 rounded-lg hover:bg-blue-50">
                 Learn More
               </Link>
             </div>
