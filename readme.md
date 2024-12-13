@@ -3,9 +3,47 @@ Symptriage
 
 ### Challenges Faced and Lessons Learned
 
-we learned about different ML models and thier specific use cases how to evalutate them and how ML plays a vital role in information retrieval. 
+Throughout the development of Symptriage, we encountered numerous challenges and, in overcoming them, gained valuable insights across a range of domains.
 
-Other then the ML and IR part we learned a lot about how to integrate ML model to the web application and also for our project we used a lot of framworks and stacks like for frontend we used next.js and for DB we used firebase for backend we used Python FastAPI and chatGPTAPI
+**Machine Learning Exploration**
+
+One of the core components of our project was understanding and working with different machine learning (ML) models. We explored a variety of models, including:
+
+-  **K-Nearest Neighbors (KNN)**: For its simplicity and effectiveness in classification tasks.
+
+-  **Random Forest (RF)**: To handle datasets with complex relationships while avoiding overfitting.
+
+-  **Multilayer Perceptron (MLP)**: As an introduction to neural networks for classification and regression problems.
+
+-  **XGBoost**: For its power and efficiency in tackling large-scale data and predictive modeling.
+
+Each of these models presented unique use cases, strengths, and limitations. Along the way, we also learned how to evaluate these models effectively, using metrics such as accuracy, precision, recall, and F1-score. Importantly, we deepened our understanding of how ML contributes to the field of **Information Retrieval (IR)**, enhancing systems to deliver relevant and precise results.
+
+**Integrating Machine Learning with a Web Application**
+
+Beyond building and fine-tuning ML models, we faced the challenge of deploying them in a seamless web application. This involved bridging the gap between theoretical machine learning concepts and real-world implementation. Learning how to integrate these models with a user-friendly interface taught us the importance of scalability and efficiency in software design.
+
+**Technology Stack Mastery**
+
+For this project, we worked with a variety of tools and frameworks, which greatly expanded our technical skill set:
+
+-  **Frontend**: We used **Next.js**, a powerful React framework, to create a responsive and dynamic user interface.
+
+-  **Backend**: **Python FastAPI** was our go-to choice for serving the ML model and handling API calls. FastAPI's speed and simplicity made it ideal for our needs.
+
+-  **Database**: We implemented **Firebase** for its real-time capabilities and ease of integration with the web app.
+
+-  **AI Integration**: Incorporating the **ChatGPT API** allowed us to provide intelligent responses and enhance user interaction.
+
+Working with these technologies not only taught us their practical applications but also gave us a deep appreciation for how they complement each other in full-stack development.
+
+**Collaboration and Problem-Solving**
+
+Lastly, the collaborative aspect of this project was a major learning experience. Balancing tasks, debugging issues, and integrating different components required clear communication and teamwork. Overcoming roadblocks together gave us a stronger understanding of project management and how to work efficiently in a team setting.
+
+**In Summary**
+
+This project was a remarkable journey where we learned not only about advanced ML models and their role in Information Retrieval but also about the intricacies of deploying these models within a scalable web application. The hands-on experience with cutting-edge tools and frameworks has given us confidence and clarity to tackle similar challenges in the future.
 
 
 ### Demo: [Symptriage](https://symptriage.vercel.app/)
