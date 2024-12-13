@@ -1,6 +1,13 @@
 Symptriage
 ----------
 
+### Challenges Faced and Lessons Learned
+
+we learned about different ML models and thier specific use cases how to evalutate them and how ML plays a vital role in information retrieval. 
+
+Other then the ML and IR part we learned a lot about how to integrate ML model to the web application and also for our project we used a lot of framworks and stacks like for frontend we used next.js and for DB we used firebase for backend we used Python FastAPI and chatGPTAPI
+
+
 ### Demo: [Symptriage](https://symptriage.vercel.app/)
 
 ### GitHub: [Vinayakrevankar/Symptriage](https://github.com/Vinayakrevankar/Symptriage)
