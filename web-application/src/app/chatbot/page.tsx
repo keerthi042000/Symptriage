@@ -32,14 +32,31 @@ export default function Chatbot() {
   // State to store the chat messages
   // const [messages, setMessages] = useState<Message[]>([]);
 
-  const [messages, setMessages] = useState<Message[]>(() => {
-  // Load from localStorage on first render
-    const saved = localStorage.getItem("chatMessages");
-    return saved ? JSON.parse(saved) : [];
-  });
+  // const [messages, setMessages] = useState<Message[]>(() => {
+  // // Load from localStorage on first render
+  //   const saved = localStorage.getItem("chatMessages");
+  //   return saved ? JSON.parse(saved) : [];
+  // });
+
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  // Load from localStorage *after* component mounts
   useEffect(() => {
-    localStorage.setItem("chatMessages", JSON.stringify(messages));
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("chatMessages");
+      if (saved) setMessages(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("chatMessages", JSON.stringify(messages));
+    }
   }, [messages]);
+
+  // useEffect(() => {
+  //   localStorage.setItem("chatMessages", JSON.stringify(messages));
+  // }, [messages]);
 
 
   const [viewMessage] = useState<boolean>(false); // Fix: use 'boolean' instead of 'Boolean'
@@ -326,18 +343,38 @@ export default function Chatbot() {
       const text = `Diagnosis - ${res?.majority_prediction}\nMedications:\n${medsList}`;
 
 
-      const getUserInfo = await getUser(window.localStorage.getItem("email"));
-      const currentDate = new Date();
+      // const getUserInfo = await getUser(window.localStorage.getItem("email"));
+
+      if (typeof window !== "undefined") {
+        const email = window.localStorage.getItem("email");
+        if (email) {
+          const getUserInfo = await getUser(email);
+          // const oldHistory = getUserInfo.user.history || [];
+          let oldHistory = getUserInfo['user'].history || []; 
+          // const formattedDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
+          const currentDate = new Date();
+          const formattedDateTime = currentDate.getFullYear() + '-' 
+            + String(currentDate.getMonth() + 1).padStart(2, '0') + '-' 
+            + String(currentDate.getDate()).padStart(2, '0') + ' ' 
+            + String(currentDate.getHours()).padStart(2, '0') + ':' 
+            + String(currentDate.getMinutes()).padStart(2, '0') + ':' 
+            + String(currentDate.getSeconds()).padStart(2, '0');
+          await updateUserHistory(email, [...oldHistory, { [formattedDateTime]: res?.majority_prediction }]);
+        }
+      }
+
+
+  //     const currentDate = new Date();
   
-  // Format the date as "YYYY-MM-DD"
-      const formattedDateTime = currentDate.getFullYear() + '-' 
-      + String(currentDate.getMonth() + 1).padStart(2, '0') + '-' 
-      + String(currentDate.getDate()).padStart(2, '0') + ' ' 
-      + String(currentDate.getHours()).padStart(2, '0') + ':' 
-      + String(currentDate.getMinutes()).padStart(2, '0') + ':' 
-      + String(currentDate.getSeconds()).padStart(2, '0');
-      let oldHistory = getUserInfo['user'].history || []; 
-      await updateUserHistory(window.localStorage.getItem("email"),[...oldHistory ,{ [formattedDateTime]: res?.majority_prediction }]);
+  // // Format the date as "YYYY-MM-DD"
+  //     const formattedDateTime = currentDate.getFullYear() + '-' 
+  //     + String(currentDate.getMonth() + 1).padStart(2, '0') + '-' 
+  //     + String(currentDate.getDate()).padStart(2, '0') + ' ' 
+  //     + String(currentDate.getHours()).padStart(2, '0') + ':' 
+  //     + String(currentDate.getMinutes()).padStart(2, '0') + ':' 
+  //     + String(currentDate.getSeconds()).padStart(2, '0');
+  //     let oldHistory = getUserInfo['user'].history || []; 
+  //     await updateUserHistory(window.localStorage.getItem("email"),[...oldHistory ,{ [formattedDateTime]: res?.majority_prediction }]);
   
       // Add chatbot response after user message
       const chatbotReply: Message = {
