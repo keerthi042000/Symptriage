@@ -54,7 +54,7 @@ const signUp = async (user) => {
     );
     const res = userCreditional.user;
     console.log(res);
-    localStorage.setItem("email", email);
+    localStorage.setItem("email", user.email);
     // alert("user created successfully");
     return await addUser(user);
   } catch (error) {
@@ -69,6 +69,7 @@ const signUp = async (user) => {
 const signIn = async (email, password) => {
   const signInEmail = email;
   const signInPassword = password;
+  console.log(email);
 
   try {
     let userCredential = await signInWithEmailAndPassword(
@@ -76,6 +77,7 @@ const signIn = async (email, password) => {
       signInEmail,
       signInPassword
     );
+    console.log(userCredential);
     const user = userCredential.user;
     console.log(user);
     localStorage.setItem("email", email);
@@ -107,7 +109,10 @@ const checkAuthState = async () => {
 const userSignOut = async () => {
   try {
     await signOut(auth);
-    return true;
+    localStorage.removeItem("email");
+    localStorage.removeItem("chatMessages");
+    // router.push("/");
+    return { code: "200" };
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
@@ -133,6 +138,7 @@ const addUser = async (user) => {
 
 const getUser = async (email) => {
   try {
+    console.log(email);
     const docRef = doc(db, "users", email);
     let user = await getDoc(docRef);
     console.log(user.data());
@@ -148,19 +154,27 @@ const getUser = async (email) => {
 const getMedicine = async (disease) => {
   try {
     let medicines = {};
-    for (let i = 0; i <= 9; i++) {
-      const key = `${disease}${i}`;
-      const docRef = doc(db, "medicine", key);
-      let docSnap = await getDoc(docRef);
+    // for (let i = 0; i <= 9; i++) {
+    //   const key = `${disease}${i}`;
+    //   const docRef = doc(db, "medications", key);
+    //   let docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        // console.log(docSnap.data());
+    //   if (docSnap.exists()) {
+    //     // console.log(docSnap.data());
 
-        medicines[key] = docSnap.data();
-      }
+    //     medicines[key] = docSnap.data();
+    //   }
+    // }
+
+    const docRef = doc(db, "medications", disease);
+    let docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Docsnap : ", docSnap)
+      medicines = docSnap.data().Medication;
     }
 
-    // console.log(medicines);
+    console.log(medicines);
     return { code: "200", medicines };
   } catch (e) {
     const errorCode = e.code;

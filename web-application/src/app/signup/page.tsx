@@ -33,10 +33,15 @@ export default function Signup() {
                 password: password
             }
 
-             await signUp(user)
-           
+            const res = await signUp(user)
+           if (res.code == 200) {
+                router.push("/chatbot");
+            } else {
+                throw(res)
+                // setError(res.msg || "An error occurred during signup. Please try again.");
+            }
             // Redirect to the dashboard or home page after successful signup
-            router.push("/chatbot");
+            // router.push("/chatbot");
         } catch (error: any) {
             if (error.code) {
                 switch (error.code) {

@@ -1,8 +1,23 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from "next/navigation";
+
 
 const LandingPage = () => {
+
+  const router = useRouter();
+
+  const handleStartPrediction = () => {
+    const email = localStorage.getItem("email");
+    if (email) {
+      router.push("/chatbot"); // 🔹 user is logged in → go to chatbot
+    } else {
+      router.push("/login"); // 🔹 not logged in → go to login page
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Hero Section */}
@@ -26,9 +41,17 @@ const LandingPage = () => {
               Get instant disease predictions based on your symptoms and receive personalized medicine recommendations from our advanced AI system.
             </p>
             <div className="space-x-4">
-              <Link href="/predict" className="bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+
+              <button
+                onClick={handleStartPrediction}
+                className="bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+              >
                 Start Prediction
-              </Link>
+              </button>
+
+              {/* <Link href="/predict" className="bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                Start Prediction
+              </Link> */}
               <Link href="./Blogs" className="border border-blue-800 text-blue-800 px-6 py-3 rounded-lg hover:bg-blue-50">
                 Learn More
               </Link>

@@ -6,6 +6,10 @@ import "dotenv/config";
 import { useRouter } from "next/navigation";
 import { updateUserHistory, getUser, getMedicine } from "../../../utils/db";
 import { openai } from "../../../utils/db";
+import Header from "../header"
+
+import Sidebar from "../sidebar";
+
 
 // Define the type for a message
 type Message = {
@@ -26,7 +30,18 @@ interface Response {
 
 export default function Chatbot() {
   // State to store the chat messages
-  const [messages, setMessages] = useState<Message[]>([]);
+  // const [messages, setMessages] = useState<Message[]>([]);
+
+  const [messages, setMessages] = useState<Message[]>(() => {
+  // Load from localStorage on first render
+    const saved = localStorage.getItem("chatMessages");
+    return saved ? JSON.parse(saved) : [];
+  });
+  useEffect(() => {
+    localStorage.setItem("chatMessages", JSON.stringify(messages));
+  }, [messages]);
+
+
   const [viewMessage] = useState<boolean>(false); // Fix: use 'boolean' instead of 'Boolean'
   const router = useRouter();
 
@@ -183,16 +198,18 @@ export default function Chatbot() {
 
     try {
       const response = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: "You are a helpful assistant." },
           { role: "user", content: prompt },
         ],
         max_tokens: 300,
         temperature: 0,
+        response_format: { type: "json_object" },
       });
-
+      console.log(response);
       const result = response.choices[0].message.content;
+      console.log(result);
       if (typeof result === "string") {
         return JSON.parse(result);
       } else {
@@ -207,8 +224,10 @@ export default function Chatbot() {
   // Function to send symptoms to the backend API
   async function sendToBackend(symptomsObj: Record<string, number>) { // Fix: Use Record<string, number> instead of 'any'
     try {
+      const backend_url = process.env.NEXT_PUBLIC_BACKEND_API_URL
       const response = await axios.post(
-        "https://kmurali-dbos-fastapi-starter.cloud.dbos.dev/predict",
+        // "https://kmurali-dbos-fastapi-starter.cloud.dbos.dev/predict",
+        `${backend_url}/predict`,
         { symptoms: symptomsObj },
         {
           headers: { "Content-Type": "application/json" },
@@ -226,22 +245,37 @@ export default function Chatbot() {
   }
 
   // Initialize chatbot greeting message when component mounts
+  // useEffect(() => {
+  //   if (!viewMessage) {
+  //     setMessages([]);
+  //     setMessages((prev) => [
+  //       ...prev,
+  //       {
+  //         sender: "Chatbot",
+  //         text: "Hello! I'm here to help you understand your symptoms better. Please share more details.",
+  //         timestamp: new Date().toLocaleTimeString([], {
+  //           hour: "2-digit",
+  //           minute: "2-digit",
+  //         }),
+  //       },
+  //     ]);
+  //   }
+  // }, [viewMessage]); // Fix: Include 'viewMessage' in the dependency array
+
   useEffect(() => {
-    if (!viewMessage) {
-      setMessages([]);
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: "Chatbot",
-          text: "Hello! I'm here to help you understand your symptoms better. Please share more details.",
-          timestamp: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ]);
-    }
-  }, [viewMessage]); // Fix: Include 'viewMessage' in the dependency array
+  if (!viewMessage && messages.length === 0) {
+    setMessages([
+      {
+        sender: "Chatbot",
+        text: "Hello! I'm here to help you understand your symptoms better. Please share more details.",
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
+    ]);
+  }
+}, [viewMessage, messages.length]);
 
   // Function to handle sending a message
   const handleSendMessage = async () => {
@@ -262,6 +296,7 @@ export default function Chatbot() {
     const response = await extractSymptoms(input.trim());
     if(Object.keys(response).length !==0){
       const res: Response = await sendToBackend(response);
+      console.log(res);
       // const text = `Predicted - ${
       //   res?.majority_prediction
       // }`;
@@ -269,12 +304,28 @@ export default function Chatbot() {
       let random = ["Acne","Allergies","Hypertension"]
       let r = random[getRandomInt(3)]
       let r2 = getRandomInt(10)
-      const res2 = await getMedicine(r)
-      console.log(res2.medicines[`${r}${r2}`].Drug);
+      // const res2 = await getMedicine(r)
+      const res2 = await getMedicine(res?.majority_prediction)
+      console.log("R : ",r)
+      console.log("R2 : ",res2)
+      // console.log(res2.medicines[`${r}${r2}`].Drug);
       // alert(res2.medicines[`${r}${r2}`].Drug)
-      const text = `Predicted - ${
-        res?.majority_prediction
-      } ${res2.medicines[`${r}${r2}`].Drug}`;
+      // const text = `Predicted - ${
+      //   res?.majority_prediction
+      // } ${res2.medicines[`${r}${r2}`].Drug}`;
+
+      // const text = `Predicted - ${
+      //   res?.majority_prediction
+      // } 
+      // \n Medications :  ${res2.medicines}`;
+
+      const medsList = Array.isArray(res2.medicines)
+        ? res2.medicines.join("\n")
+        : res2.medicines.replace(/, /g, "\n");
+
+      const text = `Diagnosis - ${res?.majority_prediction}\nMedications:\n${medsList}`;
+
+
       const getUserInfo = await getUser(window.localStorage.getItem("email"));
       const currentDate = new Date();
   
@@ -285,7 +336,7 @@ export default function Chatbot() {
       + String(currentDate.getHours()).padStart(2, '0') + ':' 
       + String(currentDate.getMinutes()).padStart(2, '0') + ':' 
       + String(currentDate.getSeconds()).padStart(2, '0');
-      let oldHistory = getUserInfo.history || []; 
+      let oldHistory = getUserInfo['user'].history || []; 
       await updateUserHistory(window.localStorage.getItem("email"),[...oldHistory ,{ [formattedDateTime]: res?.majority_prediction }]);
   
       // Add chatbot response after user message
@@ -324,7 +375,9 @@ export default function Chatbot() {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <div className="w-64 bg-slate-800 p-5 text-white">
+      <Sidebar />
+
+      {/* <div className="w-64 bg-slate-800 p-5 text-white">
         <h2 className="mb-5 text-center text-xl font-bold">
           ChatBot
         </h2>
@@ -336,8 +389,8 @@ export default function Chatbot() {
             }}
           >
             History
-          </li>
-          <li className="mb-2 cursor-pointer rounded-md p-3 hover:bg-slate-700">
+          </li> */}
+          {/* <li className="mb-2 cursor-pointer rounded-md p-3 hover:bg-slate-700">
             Depression Support
           </li>
           <li className="mb-2 cursor-pointer rounded-md p-3 hover:bg-slate-700">
@@ -348,16 +401,18 @@ export default function Chatbot() {
           </li>
           <li className="mb-2 cursor-pointer rounded-md p-3 hover:bg-slate-700">
             Sleep Help
-          </li>
-        </ul>
-      </div>
+          </li> */}
+        {/* </ul>
+      </div> */}
 
       {/* Chat Container */}
       <div className="flex flex-1 flex-col bg-gray-50">
         {/* Chat Header */}
-        <div className="bg-blue-500 p-5 text-center text-white">
+        <div className="bg-blue-100 p-5 text-center text-black">
           <h1 className="text-xl font-bold">SympTriage</h1>
         </div>
+
+        {/* <Header /> */}
 
         {/* Chat Messages */}
         <div className="flex-1 overflow-y-auto p-5">
@@ -376,7 +431,8 @@ export default function Chatbot() {
                   {message.timestamp}
                 </span>
               </div>
-              <div>{message.text}</div>
+              {/* <div>{message.text}</div> */}
+              <div style={{ whiteSpace: "pre-line" }}>{message.text}</div>
             </div>
           ))}
         </div>

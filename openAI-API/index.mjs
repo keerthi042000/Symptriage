@@ -4,8 +4,8 @@ import fs from "fs";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-    organization: "org-wg7LqXr0fjN27FhhxxIZfKZu",
-    apiKey: "",
+    organization: process.env.NEXT_PUBLIC_OPENAI_ORG,
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
 });
 
 
@@ -58,7 +58,7 @@ async function extractSymptoms(sentence) {
 
     try {
         const response = await openai.chat.completions.create({
-            model: "gpt-4",
+            model: "gpt-3",
             messages: [
                 { role: "system", content: "You are a helpful assistant." },
                 { role: "user", content: prompt }

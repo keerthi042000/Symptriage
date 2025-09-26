@@ -20,14 +20,23 @@ export default function Login() {
         try {
             const response = await signIn(email, password);
             console.log("Logged in user:", response);
+            if (response.code == 200) {
+                router.push("/chatbot");
+            } else {
+                throw(response)
+                // setError(res.msg || "An error occurred during signup. Please try again.");
+            }
             
             // Redirect to dashboard or home page after successful login
-            router.push("/chatbot"); // Adjust this path as needed
+            // router.push("/chatbot"); // Adjust this path as needed
         } catch (error: any) {
             if (error.code) {
                 switch (error.code) {
                     case "auth/user-not-found":
                         setError("No user found with this email.");
+                        break;
+                    case "auth/invalid-credential":
+                        setError("Invalid credentials.");
                         break;
                     case "auth/wrong-password":
                         setError("Incorrect password.");
